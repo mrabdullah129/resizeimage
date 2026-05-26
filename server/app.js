@@ -10,9 +10,15 @@ import { errorHandler } from './middleware/error.middleware.js';
 const app = express();
 
 app.use(helmet());
+const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : null;
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL?.split(',') || ['http://localhost:5173'],
+    origin: (origin, callback) => {
+      if (!allowedOrigins) return callback(null, true);
+      if (!origin) return callback(null, true);
+      return allowedOrigins.includes(origin) ? callback(null, true) : callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']

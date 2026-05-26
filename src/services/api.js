@@ -2,8 +2,7 @@ import axios from 'axios';
 
 export const api = axios.create({
   // Prefer explicit VITE_API_BASE_URL, otherwise target the same host as the page
-  baseURL:
-    import.meta.env.VITE_API_BASE_URL || `${window.location.protocol}//${window.location.hostname}:5000/api`
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api'
 });
 
 api.interceptors.request.use((config) => {
